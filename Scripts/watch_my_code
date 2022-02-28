@@ -1,0 +1,32 @@
+echo "🕵️   Watching :- " + $1 +" with test files"| lolcat
+
+# watch the whole directory
+inotifywait -q -m -e close_write . |
+while read -r filename event; do
+    echo "----------------------------------------------------------------------" | lolcat
+    # code to run python file
+    if [[ $1 == *.py ]]
+    then
+        if ls test* 1> /dev/null 2>&1; #check if there is any test file
+        then
+            for testfile in test*; do
+                cat $testfile | python3 $1
+                echo "----------------------------------------------------------------------"
+            done 
+        else
+            python3 $1
+        fi
+    # code to run java file 
+    elif [[ $1 == *.java ]]
+    then
+        if ls test* 1> /dev/null 2>&1; 
+        then 
+            for testfile in test*; do
+                cat $testfile | /usr/bin/env /usr/lib64/openjdk-11/bin/java -cp "/home/ranjan/.config/Code - OSS/User/workspaceStorage/bb2bd0a4dfa4a4beae91d38cc918131c/redhat.java/jdt_ws/Leet_c4afd1a9/bin" ${1%.*}
+                echo "----------------------------------------------------------------------"
+            done
+        else
+            /usr/bin/env /usr/lib64/openjdk-11/bin/java -cp "/home/ranjan/.config/Code - OSS/User/workspaceStorage/bb2bd0a4dfa4a4beae91d38cc918131c/redhat.java/jdt_ws/Leet_c4afd1a9/bin" ${1%.*}
+        fi
+    fi
+done
