@@ -12,21 +12,36 @@ while read -r filename event; do
             for testfile in test*; do
                 cat $testfile | python3 $1
                 echo "----------------------------------------------------------------------"
-            done 
+            done
         else
             python3 $1
         fi
-    # code to run java file 
+        # code to run java file
     elif [[ $1 == *.java ]]
     then
-        if ls test* 1> /dev/null 2>&1; 
-        then 
+        if ls test* 1> /dev/null 2>&1;
+        then
             for testfile in test*; do
                 cat $testfile | /usr/bin/env /usr/lib64/openjdk-11/bin/java -cp "/home/ranjan/.config/Code - OSS/User/workspaceStorage/bb2bd0a4dfa4a4beae91d38cc918131c/redhat.java/jdt_ws/Leet_c4afd1a9/bin" ${1%.*}
                 echo "----------------------------------------------------------------------"
             done
         else
             /usr/bin/env /usr/lib64/openjdk-11/bin/java -cp "/home/ranjan/.config/Code - OSS/User/workspaceStorage/bb2bd0a4dfa4a4beae91d38cc918131c/redhat.java/jdt_ws/Leet_c4afd1a9/bin" ${1%.*}
+        fi
+        # code to run cpp file
+    elif [[ $1 == *.cpp ]]
+    then
+        if ls test* 1> /dev/null 2>&1; #check if there is any test file
+        then
+            g++ -o ~/out $1 #compile
+            if [ $? -eq 0 ]; then #check if compilation got success
+                for testfile in test*; do
+                    cat $testfile | ~/out #run
+                    echo "----------------------------------------------------------------------"
+                done
+            fi
+        else
+            g++ -o ~/out $1 && ~/out #compile and run
         fi
     fi
 done
