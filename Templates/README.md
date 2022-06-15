@@ -1,0 +1,1 @@
+Templates are only for competition, DO NOT USE them during practice.
